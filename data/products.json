@@ -4,7 +4,7 @@
     "title": "IKEA VIVIC",
     "description": "condition good",
     "price": 100,
-    "sold": false,
+    "sold": true,
     "images": [
       "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787948060235_4561ffb2f944a5ba00213f7f156e51c6.jpg",
       "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787948061746_588352552c9eb99faafea89e.png",
