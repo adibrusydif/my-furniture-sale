@@ -1,5 +1,17 @@
 [
   {
+    "id": "1bc8578e-f0c3-4d36-a8d5-abc3a6dfd6b3",
+    "title": "Termos (baru)",
+    "description": "Kondisi baru, belum di buka, merk home creation",
+    "price": 5,
+    "sold": false,
+    "images": [
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787949751304_IMG_1758.jpeg",
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787949755343_IMG_1759.jpeg"
+    ],
+    "createdAt": "2026-08-28T20:42:38.523Z"
+  },
+  {
     "id": "4324a79a-52c6-4b89-ad29-4429c3ff417c",
     "title": "Air Fryer Philip",
     "description": "Buat masak masak",
