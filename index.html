@@ -31,7 +31,7 @@
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px}
     @media(max-width:600px){.grid{grid-template-columns:1fr;gap:16px}main{padding:20px 14px 50px}}
     /* Card */
-    .card{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;transition:box-shadow .2s,transform .2s}
+    .card{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;transition:box-shadow .2s,transform .2s;cursor:pointer}
     .card:hover{box-shadow:var(--sh-lg);transform:translateY(-3px)}
     .card.sold{opacity:.7}
     /* Slideshow */
@@ -161,15 +161,15 @@ function cardHtml(p) {
     ? images.map(src => `<div class="slide"><img src="${esc(src)}" alt="${esc(title)}" loading="lazy"></div>`).join('')
     : `<div class="slide"><div class="slide-ph">&#128715;</div></div>`;
   const arrows = total > 1 ? `
-    <button class="nav-btn lft" onclick="go('${id}',-1,${total})" aria-label="Previous">&#8249;</button>
-    <button class="nav-btn rgt" onclick="go('${id}', 1,${total})" aria-label="Next">&#8250;</button>` : '';
+    <button class="nav-btn lft" onclick="event.stopPropagation();go('${id}',-1,${total})" aria-label="Previous">&#8249;</button>
+    <button class="nav-btn rgt" onclick="event.stopPropagation();go('${id}', 1,${total})" aria-label="Next">&#8250;</button>` : '';
   const dots = total > 1
     ? `<div class="dots">${images.map((_,i)=>
-        `<button class="dot ${i===cur?'active':''}" onclick="goTo('${id}',${i})" aria-label="Slide ${i+1}"></button>`
+        `<button class="dot ${i===cur?'active':''}" onclick="event.stopPropagation();goTo('${id}',${i})" aria-label="Slide ${i+1}"></button>`
       ).join('')}</div>` : '';
   const overlay = sold ? `<div class="sold-overlay"><span class="sold-stamp">SOLD</span></div>` : '';
   return `
-  <article class="card ${sold?'sold':''}" id="c-${id}">
+  <article class="card ${sold?'sold':''}" id="c-${id}" onclick="location.href='product.html?id='+encodeURIComponent('${id}')">
     <div class="slideshow">
       <div class="slides" id="sl-${id}" style="transform:translateX(-${cur*100}%)">
         ${slides}
