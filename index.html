@@ -254,6 +254,87 @@ function showEmpty()    { el('loading').classList.add('hidden'); el('empty').cla
 function el(id) { return document.getElementById(id); }
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+/* ═══ CART ═══════════════════════════════════════════════════════ */
+function getCart(){try{return JSON.parse(localStorage.getItem('fg_cart')||'[]');}catch(e){return[];}}
+function saveCart(c){localStorage.setItem('fg_cart',JSON.stringify(c));}
+
+function cartAdd(btn){
+  var id=btn.getAttribute('data-id'),
+      title=btn.getAttribute('data-title'),
+      price=Number(btn.getAttribute('data-price'));
+  var cart=getCart();
+  for(var i=0;i<cart.length;i++){if(cart[i].id===id){cToast('Already in cart \u2714');return;}}
+  cart.push({id:id,title:title,price:price});
+  saveCart(cart);cBadge();cToast('Added to cart \u2705');
+}
+
+function cartRemove(id){
+  saveCart(getCart().filter(function(x){return x.id!==id;}));
+  cBadge();renderCart();
+}
+
+function cBadge(){
+  var n=getCart().length,b=el('cart-ct');
+  if(b){b.textContent=n;b.style.display=n>0?'flex':'none';}
+}
+
+function openCart(){
+  el('cart-ov').classList.add('open');
+  el('cart-dr').classList.add('open');
+  document.body.style.overflow='hidden';
+  renderCart();
+}
+
+function closeCart(){
+  el('cart-ov').classList.remove('open');
+  el('cart-dr').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function renderCart(){
+  var cart=getCart(),list=el('c-list'),wa=el('wa-btn'),tot=el('c-tot');
+  if(!cart.length){
+    list.innerHTML='<div class="c-empty"><p>\u{1F6D2} Cart is empty</p></div>';
+    if(wa)wa.style.display='none';if(tot)tot.textContent='\u20AC0';return;
+  }
+  var total=0,html='';
+  for(var i=0;i<cart.length;i++){
+    var item=cart[i];total+=Number(item.price);
+    html+='<div class="c-item"><div class="c-body"><div class="c-name">'+xss(item.title)+'</div>'+
+      '<div class="c-pr">\u20AC'+Number(item.price).toLocaleString('de-DE')+'</div></div>'+
+      '<button class="c-rm" onclick="cartRemove(\''+item.id+'\')">\u00D7</button></div>';
+  }
+  list.innerHTML=html;
+  if(tot)tot.textContent='\u20AC'+total.toLocaleString('de-DE');
+  if(wa)wa.style.display='';
+}
+
+function contactWa(){
+  var cart=getCart();if(!cart.length)return;
+  var msg='Halo! Saya tertarik membeli:\n\n',total=0;
+  for(var i=0;i<cart.length;i++){
+    msg+='\u2022 '+cart[i].title+': \u20AC'+Number(cart[i].price).toLocaleString('de-DE')+'\n';
+    total+=Number(cart[i].price);
+  }
+  msg+='\nTotal: \u20AC'+total.toLocaleString('de-DE');
+  msg+='\n\nDari: adibrusydif.github.io/my-furniture-sale';
+  window.open('https://wa.me/4915231413165?text='+encodeURIComponent(msg),'_blank');
+}
+
+function xss(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+var _ct;
+function cToast(msg){
+  var t=document.getElementById('_ct');
+  if(!t){t=document.createElement('div');t.id='_ct';
+    t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 22px;border-radius:99px;font:500 .875rem Inter,sans-serif;z-index:500;white-space:nowrap;max-width:90vw;text-align:center;transition:opacity .2s;pointer-events:none';
+    document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(_ct);_ct=setTimeout(function(){t.style.opacity='0';},2500);
+}
+
+cBadge();
+
 load();
 </script>
 </body>
