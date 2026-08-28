@@ -1,14 +1,15 @@
 [
   {
     "id": "e78077b3-fa6f-4981-92a2-370deca2a179",
-    "title": "IKEA VIVIC",
+    "title": "Sweeek Sofabed",
     "description": "condition good",
-    "price": 100,
+    "price": 150,
     "sold": false,
     "images": [
-      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787948060235_4561ffb2f944a5ba00213f7f156e51c6.jpg",
-      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787948061746_588352552c9eb99faafea89e.png",
-      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787948063412_daniel-tigers-neighborhood-2798eaf5-8063-4fc2-bf99-8a189241ec0-resize-750__1_.webp"
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787948554053_IMG_2636.png",
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787948556460_IMG_2633.jpeg",
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787948563064_IMG_2634.jpeg",
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787948569001_IMG_2635.jpeg"
     ],
     "createdAt": "2026-08-28T20:14:25.045Z"
   }
