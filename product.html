@@ -3,405 +3,442 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Product Detail — Furniture Sale</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <title>Product — Furniture Sale</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
       --bg:#FAF8F5;--surface:#fff;--primary:#B5622A;
       --text:#1C1917;--muted:#78716C;--border:#E7E5E4;
-      --sold:#DC2626;--avail:#16A34A;
       --r:12px;--sh:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06);
-      --sh-lg:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05);
     }
     body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
-    /* Nav bar */
-    .nav-bar{background:linear-gradient(135deg,#1C0A00,#5C3317,#8B4513);padding:0 20px;height:52px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50}
-    .back-link{color:rgba(255,255,255,.8);text-decoration:none;font:500 .875rem 'Inter',sans-serif;display:flex;align-items:center;gap:6px;transition:color .15s;white-space:nowrap;flex-shrink:0}
-    .back-link:hover{color:#fff}
-    .nav-title{color:rgba(255,255,255,.5);font-size:.83rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    /* ── Nav ─────────────────────────────────────────────────────── */
+    .nav{background:linear-gradient(135deg,#1C0A00,#5C3317,#8B4513);padding:0 20px;height:52px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50}
+    .back{color:rgba(255,255,255,.8);text-decoration:none;font:500 .875rem/1 'Inter',sans-serif;display:flex;align-items:center;gap:5px;transition:color .15s;flex-shrink:0}
+    .back:hover{color:#fff}
+    .nav-name{color:rgba(255,255,255,.45);font-size:.82rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-    /* Layout */
+    /* ── Page layout ─────────────────────────────────────────────── */
     .page{max-width:1080px;margin:0 auto;padding:36px 20px 64px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
-    @media(max-width:700px){.page{grid-template-columns:1fr;gap:24px;padding:20px 14px 52px}}
+    @media(max-width:700px){.page{grid-template-columns:1fr;gap:20px;padding:20px 14px 56px}}
 
-    /* Gallery */
-    .main-img-wrap{position:relative;background:#F0EAE0;border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;cursor:zoom-in;box-shadow:var(--sh);margin-bottom:12px}
-    #main-img{width:100%;height:100%;object-fit:cover;display:block;transition:opacity .2s}
-    .no-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:5rem;background:linear-gradient(135deg,#F0EAE0,#E0D5C5)}
-    .zoom-hint{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,.55);color:#fff;font-size:.72rem;font-weight:500;padding:4px 10px;border-radius:99px;opacity:0;transition:opacity .2s;pointer-events:none}
-    .main-img-wrap:hover .zoom-hint{opacity:1}
-    .gal-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.88);border:none;border-radius:50%;width:36px;height:36px;font-size:1.15rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);transition:all .15s;z-index:2}
-    .gal-nav:hover{background:#fff;transform:translateY(-50%) scale(1.1)}
-    .gal-nav.prev{left:10px}.gal-nav.next{right:10px}
-
-    .thumbnails{display:flex;gap:8px;flex-wrap:wrap}
+    /* ── Gallery ─────────────────────────────────────────────────── */
+    .gallery{}
+    .main-wrap{position:relative;background:#F0EAE0;border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;box-shadow:var(--sh);margin-bottom:10px;cursor:zoom-in}
+    #main-img{width:100%;height:100%;object-fit:contain;display:block}
+    .zoom-hint{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,.55);color:#fff;font-size:.7rem;font-weight:500;padding:3px 10px;border-radius:99px;opacity:0;transition:opacity .2s;pointer-events:none}
+    .main-wrap:hover .zoom-hint{opacity:1}
+    .ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:5rem;background:linear-gradient(135deg,#F0EAE0,#E0D5C5)}
+    .garr{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.88);border:none;border-radius:50%;width:36px;height:36px;font-size:1.15rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);transition:all .15s;z-index:2}
+    .garr:hover{background:#fff;transform:translateY(-50%) scale(1.1)}
+    .garr.p{left:10px}.garr.n{right:10px}
+    .thumbs{display:flex;gap:8px;flex-wrap:wrap}
     .thumb{width:72px;height:72px;border-radius:8px;overflow:hidden;cursor:pointer;border:2.5px solid transparent;transition:all .15s;flex-shrink:0}
     .thumb:hover{border-color:var(--primary)}
-    .thumb.active{border-color:var(--primary);box-shadow:0 0 0 3px rgba(181,98,42,.18)}
+    .thumb.on{border-color:var(--primary);box-shadow:0 0 0 3px rgba(181,98,42,.2)}
     .thumb img{width:100%;height:100%;object-fit:cover;display:block}
 
-    /* Info */
-    .info-tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--primary);margin-bottom:10px;display:block}
-    .info-title{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;line-height:1.2;letter-spacing:-.02em;margin-bottom:18px}
-    .price-row{display:flex;align-items:center;gap:12px;margin-bottom:22px}
-    .big-price{font-size:2rem;font-weight:700;color:var(--primary)}
-    .status-badge{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:5px 14px;border-radius:99px}
-    .status-badge.avail{background:#DCFCE7;color:#15803D}
-    .status-badge.sold{background:#FEE2E2;color:#B91C1C}
-    hr{border:none;border-top:1px solid var(--border);margin-bottom:22px}
-    .desc-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px}
-    .full-desc{font-size:.95rem;line-height:1.8;color:var(--muted);white-space:pre-wrap}
+    /* ── Info ────────────────────────────────────────────────────── */
+    .tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--primary);margin-bottom:10px;display:block}
+    .ptitle{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;line-height:1.2;letter-spacing:-.02em;margin-bottom:18px}
+    .prow{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+    .pprice{font-size:2rem;font-weight:700;color:var(--primary)}
+    .badge{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:5px 14px;border-radius:99px}
+    .badge.av{background:#DCFCE7;color:#15803D}
+    .badge.sd{background:#FEE2E2;color:#B91C1C}
+    .divider{height:1px;background:var(--border);margin-bottom:20px}
+    .dlabel{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px}
+    .desc{font-size:.95rem;line-height:1.8;color:var(--muted);white-space:pre-wrap}
 
-    /* Messages */
+    /* ── States ──────────────────────────────────────────────────── */
     .msg{text-align:center;padding:80px 20px}
-    .msg .icon{font-size:3.5rem;display:block;margin-bottom:12px}
+    .msg .ico{font-size:3.5rem;display:block;margin-bottom:12px}
     .msg h3{font-size:1.2rem;font-weight:600;margin-bottom:6px}
     .msg p{color:var(--muted);font-size:.875rem}
 
-    /* Skeleton */
-    .sk,.sk::after{background:linear-gradient(90deg,#EDE7DF 25%,#DDD5C8 50%,#EDE7DF 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px}
-    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    /* ── Skeleton ────────────────────────────────────────────────── */
     .sk-layout{max-width:1080px;margin:0 auto;padding:36px 20px;display:grid;grid-template-columns:1fr 1fr;gap:48px}
     @media(max-width:700px){.sk-layout{grid-template-columns:1fr;gap:24px;padding:20px 14px}}
-    .sk-img{height:320px;border-radius:var(--r);margin-bottom:12px}
+    .sk{background:linear-gradient(90deg,#EDE7DF 25%,#DDD5C8 50%,#EDE7DF 75%);background-size:200% 100%;animation:sh 1.4s infinite;border-radius:6px}
+    @keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .sk-img{height:320px;border-radius:var(--r);margin-bottom:10px}
     .sk-thumbs{display:flex;gap:8px}
-    .sk-thumb{width:72px;height:72px;border-radius:8px;flex-shrink:0}
+    .sk-th{width:72px;height:72px;border-radius:8px;flex-shrink:0}
     .sk-ln{height:14px;margin-bottom:10px;border-radius:6px}
 
-    /* ══ LIGHTBOX ═══════════════════════════════════════════════════ */
-    .lightbox{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column}
-    .lb-bg{position:absolute;inset:0;background:rgba(0,0,0,.97)}
-    .lb-wrap{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;min-height:0}
-
-    /* Top strip */
-    .lb-top{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;flex-shrink:0}
-    .lb-counter{color:rgba(255,255,255,.65);font:.5rem/.9 'Inter',sans-serif;font-size:.85rem}
-    .lb-x{background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:50%;width:38px;height:38px;font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
-    .lb-x:hover{background:rgba(255,255,255,.28)}
-
-    /* Image area */
-    .lb-img-area{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;min-height:0}
-    .lb-img-wrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;position:relative}
-    .lb-img-wrap.can-pan{cursor:grab}
-    .lb-img-wrap.panning{cursor:grabbing}
-    #lb-img{max-width:100%;max-height:100%;object-fit:contain;display:block;user-select:none;-webkit-user-drag:none;transform-origin:center center;will-change:transform}
-
-    /* Side arrows */
-    .lb-arr{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:50%;width:48px;height:48px;font-size:1.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:2}
-    .lb-arr:hover{background:rgba(255,255,255,.28)}
-    .lb-arr.l{left:12px}.lb-arr.r{right:12px}
-
-    /* Bottom hint (mobile) */
-    .lb-hint{position:absolute;bottom:0;left:0;right:0;text-align:center;padding:8px;color:rgba(255,255,255,.38);font-size:.72rem;pointer-events:none;transition:opacity .4s}
-
-    /* Bottom controls */
-    .lb-bottom{display:flex;align-items:center;justify-content:center;gap:10px;padding:12px 16px;flex-shrink:0}
-    .lb-btn{background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:8px;width:38px;height:38px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;font-weight:600;font-family:inherit}
-    .lb-btn:hover{background:rgba(255,255,255,.28)}
-    .lb-pct{color:rgba(255,255,255,.55);font-size:.8rem;min-width:44px;text-align:center}
+    /* ══ FULL-SCREEN LIGHTBOX ════════════════════════════════════════ */
+    #lightbox{
+      position:fixed;inset:0;z-index:9999;
+      background:#000;
+      display:flex;flex-direction:column;
+      overscroll-behavior:none;
+    }
+    /* Top bar */
+    .lb-top{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:12px 16px;flex-shrink:0;
+      background:linear-gradient(to bottom,rgba(0,0,0,.7),transparent);
+      position:absolute;top:0;left:0;right:0;z-index:2;
+    }
+    .lb-ctr{color:rgba(255,255,255,.7);font-size:.85rem;font-weight:500}
+    .lb-close{
+      background:rgba(255,255,255,.15);color:#fff;border:none;
+      border-radius:50%;width:42px;height:42px;font-size:1.5rem;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:background .15s;
+    }
+    .lb-close:hover{background:rgba(255,255,255,.3)}
+    /* Image area — takes all space */
+    .lb-img-area{
+      flex:1;display:flex;align-items:center;justify-content:center;
+      overflow:hidden;position:relative;
+    }
+    #lb-img{
+      max-width:100%;max-height:100%;object-fit:contain;
+      display:block;user-select:none;-webkit-user-drag:none;
+      transform-origin:center center;will-change:transform;
+      transition:none;
+    }
+    /* Side nav arrows */
+    .lb-arr{
+      position:absolute;top:50%;transform:translateY(-50%);
+      background:rgba(255,255,255,.15);color:#fff;border:none;
+      border-radius:50%;width:48px;height:48px;font-size:1.6rem;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:background .15s;z-index:3;
+    }
+    .lb-arr:hover{background:rgba(255,255,255,.3)}
+    #lb-prev{left:12px}#lb-next{right:12px}
+    /* Bottom hint */
+    .lb-hint{
+      position:absolute;bottom:0;left:0;right:0;
+      background:linear-gradient(to top,rgba(0,0,0,.6),transparent);
+      padding:20px 16px 14px;
+      display:flex;align-items:center;justify-content:center;gap:14px;
+      z-index:2;
+    }
+    .lb-btn{
+      background:rgba(255,255,255,.15);color:#fff;border:none;
+      border-radius:8px;width:40px;height:40px;font-size:1rem;
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      transition:background .15s;font-weight:700;font-family:inherit;
+    }
+    .lb-btn:hover{background:rgba(255,255,255,.3)}
+    #lb-pct{color:rgba(255,255,255,.6);font-size:.8rem;min-width:44px;text-align:center}
+    #lb-tip{color:rgba(255,255,255,.4);font-size:.72rem;position:absolute;bottom:60px;left:50%;transform:translateX(-50%);white-space:nowrap;pointer-events:none;transition:opacity .5s}
 
     .hidden{display:none!important}
   </style>
 </head>
 <body>
 
-<nav class="nav-bar">
-  <a href="index.html" class="back-link">&#8592; Gallery</a>
-  <span class="nav-title" id="nav-title"></span>
+<nav class="nav">
+  <a href="index.html" class="back">&#8592; Gallery</a>
+  <span class="nav-name" id="nav-name"></span>
 </nav>
 
-<!-- Loading skeleton -->
+<!-- Skeleton -->
 <div id="sk" class="sk-layout">
   <div>
     <div class="sk sk-img"></div>
     <div class="sk-thumbs">
-      <div class="sk sk-thumb"></div><div class="sk sk-thumb"></div><div class="sk sk-thumb"></div>
+      <div class="sk sk-th"></div><div class="sk sk-th"></div><div class="sk sk-th"></div>
     </div>
   </div>
   <div style="padding-top:8px">
     <div class="sk sk-ln" style="width:40%;margin-bottom:8px"></div>
-    <div class="sk sk-ln" style="height:34px;width:80%;margin-bottom:20px"></div>
-    <div class="sk sk-ln" style="height:26px;width:50%;margin-bottom:22px"></div>
+    <div class="sk sk-ln" style="height:34px;width:80%;margin-bottom:22px"></div>
+    <div class="sk sk-ln" style="height:28px;width:46%;margin-bottom:22px"></div>
     <div class="sk sk-ln" style="height:1px;margin-bottom:22px"></div>
-    <div class="sk sk-ln" style="width:30%;margin-bottom:12px"></div>
+    <div class="sk sk-ln" style="width:28%;margin-bottom:12px"></div>
     <div class="sk sk-ln" style="height:120px"></div>
   </div>
 </div>
 
 <!-- Error -->
 <div id="err" class="msg hidden">
-  <span class="icon">&#128230;</span>
+  <span class="ico">&#128230;</span>
   <h3>Product not found</h3>
-  <p id="err-text">This product may have been removed.</p>
+  <p id="err-txt">This product may have been removed.</p>
 </div>
 
-<!-- Detail -->
+<!-- Detail page -->
 <div id="page" class="page hidden">
 
-  <!-- Left: Gallery -->
-  <div>
-    <div class="main-img-wrap" id="main-wrap" onclick="openLb(currentIdx)">
+  <!-- Gallery -->
+  <div class="gallery">
+    <div class="main-wrap" id="main-wrap">
       <img id="main-img" alt="Product" />
-      <div class="zoom-hint">&#128269; Click to zoom</div>
-      <button class="gal-nav prev hidden" id="gp" onclick="event.stopPropagation();prevImg()">&#8249;</button>
-      <button class="gal-nav next hidden" id="gn" onclick="event.stopPropagation();nextImg()">&#8250;</button>
+      <div class="zoom-hint">&#128269; Tap to zoom</div>
+      <button class="garr p hidden" id="garr-p" onclick="prevImg()">&#8249;</button>
+      <button class="garr n hidden" id="garr-n" onclick="nextImg()">&#8250;</button>
     </div>
-    <div class="thumbnails" id="thumbs"></div>
+    <div class="thumbs" id="thumbs"></div>
   </div>
 
-  <!-- Right: Info -->
+  <!-- Info -->
   <div>
-    <span class="info-tag">Furniture for Sale &#127465;&#127466;</span>
-    <h1 class="info-title" id="p-title"></h1>
-    <div class="price-row">
-      <span class="big-price" id="p-price"></span>
-      <span class="status-badge" id="p-status"></span>
+    <span class="tag">Furniture for Sale &#127465;&#127466;</span>
+    <h1 class="ptitle" id="p-title"></h1>
+    <div class="prow">
+      <span class="pprice" id="p-price"></span>
+      <span class="badge" id="p-status"></span>
     </div>
-    <hr />
-    <div class="desc-label">Description</div>
-    <p class="full-desc" id="p-desc"></p>
+    <div class="divider"></div>
+    <div class="dlabel">Description</div>
+    <p class="desc" id="p-desc"></p>
   </div>
 
 </div>
 
-<!-- LIGHTBOX -->
-<div class="lightbox hidden" id="lb">
-  <div class="lb-bg" onclick="closeLb()"></div>
-  <div class="lb-wrap">
-    <div class="lb-top">
-      <span class="lb-counter" id="lb-c"></span>
-      <button class="lb-x" onclick="closeLb()">&#215;</button>
-    </div>
-    <div class="lb-img-area">
-      <div class="lb-img-wrap" id="lb-wrap">
-        <img id="lb-img" alt="Zoom" />
-        <div class="lb-hint" id="lb-hint">Double-tap / scroll to zoom &nbsp;&#183;&nbsp; Drag to pan</div>
-      </div>
-      <button class="lb-arr l" id="lb-prev" onclick="lbNav(-1)">&#8249;</button>
-      <button class="lb-arr r" id="lb-next" onclick="lbNav(1)">&#8250;</button>
-    </div>
-    <div class="lb-bottom">
-      <button class="lb-btn" onclick="lbZoom(-.4)" title="Zoom out">&#8722;</button>
-      <span class="lb-pct" id="lb-pct">100%</span>
-      <button class="lb-btn" onclick="lbZoom(.4)" title="Zoom in">+</button>
-      <button class="lb-btn" onclick="lbReset()" title="Reset zoom">&#8635;</button>
-    </div>
+<!-- FULL-SCREEN LIGHTBOX -->
+<div id="lightbox" class="hidden">
+  <div class="lb-top">
+    <span class="lb-ctr" id="lb-ctr"></span>
+    <button class="lb-close" id="lb-close">&#215;</button>
+  </div>
+  <div class="lb-img-area" id="lb-area">
+    <img id="lb-img" alt="Zoom" />
+    <button class="lb-arr" id="lb-prev">&#8249;</button>
+    <button class="lb-arr" id="lb-next">&#8250;</button>
+    <span id="lb-tip">Double-tap &#183; Pinch to zoom &#183; Drag to pan</span>
+  </div>
+  <div class="lb-hint">
+    <button class="lb-btn" id="lb-out">&#8722;</button>
+    <span id="lb-pct">100%</span>
+    <button class="lb-btn" id="lb-in">+</button>
+    <button class="lb-btn" id="lb-rst">&#8635;</button>
   </div>
 </div>
 
 <script>
-/* CONFIG — auto-detect from GitHub Pages or fill in manually */
+/* ── CONFIG ─────────────────────────────────────────────────────── */
 const CONFIG = { owner: '', repo: '', branch: 'main' };
 
 function repoInfo() {
   if (CONFIG.owner && CONFIG.repo) return CONFIG;
   const h = location.hostname, p = location.pathname;
   if (h.endsWith('.github.io'))
-    return { owner: h.slice(0, h.indexOf('.github.io')), repo: p.split('/').filter(Boolean)[0] || '', branch: CONFIG.branch };
+    return { owner: h.slice(0, h.indexOf('.github.io')), repo: p.split('/').filter(Boolean)[0]||'', branch: CONFIG.branch };
   return null;
 }
 
-/* ── State ─────────────────────────────────────────────────────── */
-let imgs = [], currentIdx = 0;
+/* ── State ───────────────────────────────────────────────────────── */
+var imgs = [], cur = 0;
 
-/* ── Load ──────────────────────────────────────────────────────── */
+/* ── Helpers ─────────────────────────────────────────────────────── */
+function g(id){ return document.getElementById(id); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function show(id){ g(id).classList.remove('hidden'); }
+function hide(id){ g(id).classList.add('hidden'); }
+
+/* ── Load ────────────────────────────────────────────────────────── */
 async function load() {
-  const pid = new URLSearchParams(location.search).get('id');
+  var pid = new URLSearchParams(location.search).get('id');
   if (!pid) return showErr('No product ID in URL.');
-  const r = repoInfo();
-  if (!r?.owner || !r?.repo) return showErr('Repo not configured.');
-  const url = `https://raw.githubusercontent.com/${r.owner}/${r.repo}/${r.branch}/data/products.json?_=${Date.now()}`;
+  var r = repoInfo();
+  if (!r || !r.owner || !r.repo) return showErr('Repo not configured. Deploy to GitHub Pages.');
+  var url = 'https://raw.githubusercontent.com/' + r.owner + '/' + r.repo + '/' + r.branch + '/data/products.json?_=' + Date.now();
   try {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const all = await res.json();
-    const p = all.find(x => x.id === pid);
+    var res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var all = await res.json();
+    var p = null;
+    for (var i = 0; i < all.length; i++) { if (all[i].id === pid) { p = all[i]; break; } }
     if (!p) return showErr('Product not found.');
     render(p);
-  } catch(e) { showErr(e.message); }
+  } catch(e) {
+    showErr(e.message);
+  }
 }
 
-/* ── Render ────────────────────────────────────────────────────── */
+/* ── Render ──────────────────────────────────────────────────────── */
 function render(p) {
-  el('sk').classList.add('hidden');
+  hide('sk');
   imgs = p.images || [];
-  currentIdx = 0;
+  cur  = 0;
 
-  document.title = `${p.title} — Furniture Sale`;
-  el('nav-title').textContent = p.title;
-  el('p-title').textContent   = p.title;
-  el('p-price').textContent   = `\u20AC${Number(p.price).toLocaleString('de-DE')}`;
-  el('p-desc').textContent    = p.description || 'No description provided.';
+  document.title = p.title + ' — Furniture Sale';
+  g('nav-name').textContent = p.title;
+  g('p-title').textContent  = p.title;
+  g('p-price').textContent  = '\u20AC' + Number(p.price).toLocaleString('de-DE');
+  g('p-desc').textContent   = p.description || '';
 
-  const st = el('p-status');
-  st.textContent = p.sold ? 'Sold' : 'Available';
-  st.className   = `status-badge ${p.sold ? 'sold' : 'avail'}`;
+  var st = g('p-status');
+  if (p.sold) { st.textContent = 'Sold';      st.className = 'badge sd'; }
+  else         { st.textContent = 'Available'; st.className = 'badge av'; }
 
-  // Main image
   if (imgs.length) {
-    el('main-img').src = imgs[0];
+    g('main-img').src = imgs[0];
+    g('main-wrap').onclick = function() { openLb(cur); };
+    g('main-wrap').style.cursor = 'zoom-in';
   } else {
-    el('main-img').style.display = 'none';
-    el('main-wrap').style.cursor = 'default';
-    el('main-wrap').insertAdjacentHTML('afterbegin', '<div class="no-img-ph">&#128715;</div>');
+    g('main-img').style.display = 'none';
+    g('main-wrap').style.cursor = 'default';
+    g('main-wrap').insertAdjacentHTML('afterbegin', '<div class="ph">&#128715;</div>');
   }
 
-  // Arrows (only if multiple images)
   if (imgs.length > 1) {
-    el('gp').classList.remove('hidden');
-    el('gn').classList.remove('hidden');
+    show('garr-p'); show('garr-n');
+    var html = '';
+    for (var i = 0; i < imgs.length; i++) {
+      html += '<div class="thumb ' + (i===0?'on':'') + '" id="th'+i+'" onclick="selImg('+i+')"><img src="'+esc(imgs[i])+'" loading="lazy" /></div>';
+    }
+    g('thumbs').innerHTML = html;
   }
 
-  // Thumbnails
-  if (imgs.length > 1) {
-    el('thumbs').innerHTML = imgs.map((src, i) => `
-      <div class="thumb ${i===0?'active':''}" id="th-${i}" onclick="selImg(${i})">
-        <img src="${esc(src)}" alt="Thumb ${i+1}" loading="lazy" />
-      </div>`).join('');
-  }
-
-  el('page').classList.remove('hidden');
+  show('page');
 }
 
-/* ── Gallery nav ───────────────────────────────────────────────── */
+/* ── Gallery navigation ──────────────────────────────────────────── */
 function selImg(i) {
-  el(`th-${currentIdx}`)?.classList.remove('active');
-  currentIdx = i;
-  el(`th-${i}`)?.classList.add('active');
-  el('main-img').src = imgs[i];
+  var old = g('th'+cur); if (old) old.classList.remove('on');
+  cur = i;
+  var nw = g('th'+cur); if (nw) nw.classList.add('on');
+  g('main-img').src = imgs[i];
 }
-function prevImg() { selImg((currentIdx - 1 + imgs.length) % imgs.length); }
-function nextImg() { selImg((currentIdx + 1) % imgs.length); }
+function prevImg() { selImg((cur - 1 + imgs.length) % imgs.length); }
+function nextImg() { selImg((cur + 1) % imgs.length); }
 
 /* ══════════════════════════════════════════════════════════════════
-   LIGHTBOX
+   FULL-SCREEN LIGHTBOX
    ══════════════════════════════════════════════════════════════════ */
-let lbIdx    = 0;
-let lbSc     = 1;
-let lbX      = 0, lbY = 0;         // pan offset (in unscaled px)
-let dragging = false;
-let dsx      = 0, dsy = 0;         // drag start
-let psx      = 0, psy = 0;         // pan start
-let pinchD0  = 0, pinchS0 = 1;     // pinch start distance & scale
-let lastTap  = 0;
+var lbIdx = 0, lbSc = 1, lbX = 0, lbY = 0;
+var drag = false, dsx = 0, dsy = 0, psx = 0, psy = 0;
+var pd0 = 0, ps0 = 1, lastTap = 0;
 
-const lbWrap = document.getElementById('lb-wrap');
-const lbImg  = document.getElementById('lb-img');
-
-function openLb(startIdx = 0) {
+function openLb(idx) {
   if (!imgs.length) return;
-  lbIdx = startIdx; lbSc = 1; lbX = 0; lbY = 0;
-  el('lb').classList.remove('hidden');
+  lbIdx = idx; lbSc = 1; lbX = 0; lbY = 0;
+  show('lightbox');
   document.body.style.overflow = 'hidden';
-  lbUpdate();
-  setTimeout(() => el('lb-hint').style.opacity = '0', 3500);
+  lbSync();
+  var tip = g('lb-tip');
+  if (tip) setTimeout(function(){ tip.style.opacity='0'; }, 3000);
 }
 
 function closeLb() {
-  el('lb').classList.add('hidden');
+  hide('lightbox');
   document.body.style.overflow = '';
   lbSc = 1; lbX = 0; lbY = 0;
-  applyTransform(false);
+  applyT(false);
 }
 
-function lbUpdate() {
-  lbImg.src = imgs[lbIdx];
-  el('lb-c').textContent = `${lbIdx + 1} \u2f ${imgs.length}`;
-  const multi = imgs.length > 1;
-  el('lb-prev').style.display = multi ? '' : 'none';
-  el('lb-next').style.display = multi ? '' : 'none';
+function lbSync() {
+  g('lb-img').src = imgs[lbIdx];
+  g('lb-ctr').textContent = (lbIdx+1) + ' / ' + imgs.length;
+  var m = imgs.length > 1;
+  g('lb-prev').style.display = m ? '' : 'none';
+  g('lb-next').style.display = m ? '' : 'none';
   lbSc = 1; lbX = 0; lbY = 0;
-  applyTransform(false);
+  applyT(false);
 }
 
-function lbNav(d) { lbIdx = (lbIdx + d + imgs.length) % imgs.length; lbUpdate(); }
-
-function lbZoom(delta) {
-  lbSc = Math.max(1, Math.min(6, lbSc * (1 + delta)));
+function lbNav(d) { lbIdx = (lbIdx + d + imgs.length) % imgs.length; lbSync(); }
+function lbZoom(d) {
+  lbSc = Math.max(1, Math.min(6, lbSc * (1 + d)));
   if (lbSc === 1) { lbX = 0; lbY = 0; }
-  applyTransform(true);
+  applyT(true);
+}
+function lbReset() { lbSc = 1; lbX = 0; lbY = 0; applyT(true); }
+
+function applyT(smooth) {
+  var img = g('lb-img');
+  img.style.transition = smooth ? 'transform .2s cubic-bezier(.4,0,.2,1)' : 'none';
+  img.style.transform  = 'translate('+lbX+'px,'+lbY+'px) scale('+lbSc+')';
+  g('lb-pct').textContent = Math.round(lbSc*100) + '%';
+  var area = g('lb-area');
+  if (area) area.style.cursor = lbSc > 1 ? 'grab' : 'zoom-in';
 }
 
-function lbReset() { lbSc = 1; lbX = 0; lbY = 0; applyTransform(true); }
+/* ── Wire up lightbox buttons ────────────────────────────────────── */
+window.addEventListener('DOMContentLoaded', function() {
+  g('lb-close').addEventListener('click', closeLb);
+  g('lb-prev').addEventListener('click', function(){ lbNav(-1); });
+  g('lb-next').addEventListener('click', function(){ lbNav(1); });
+  g('lb-in').addEventListener('click',  function(){ lbZoom(.35); });
+  g('lb-out').addEventListener('click', function(){ lbZoom(-.3); });
+  g('lb-rst').addEventListener('click', lbReset);
 
-function applyTransform(smooth) {
-  lbImg.style.transition = smooth ? 'transform .22s cubic-bezier(.4,0,.2,1)' : 'none';
-  lbImg.style.transform  = `translate(${lbX}px,${lbY}px) scale(${lbSc})`;
-  el('lb-pct').textContent = `${Math.round(lbSc * 100)}%`;
-  lbWrap.className = `lb-img-wrap${lbSc > 1 ? ' can-pan' : ''}`;
+  var area = g('lb-area');
+
+  /* Mouse drag */
+  area.addEventListener('mousedown', function(e) {
+    if (lbSc > 1) { drag=true; dsx=e.clientX; dsy=e.clientY; psx=lbX; psy=lbY; area.style.cursor='grabbing'; e.preventDefault(); }
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (!drag) return;
+    lbX = psx + (e.clientX-dsx)/lbSc;
+    lbY = psy + (e.clientY-dsy)/lbSc;
+    applyT(false);
+  });
+  document.addEventListener('mouseup', function() {
+    drag=false;
+    if (!g('lightbox').classList.contains('hidden')) applyT(false);
+  });
+
+  /* Scroll wheel */
+  area.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    lbSc = Math.max(1, Math.min(6, lbSc * (e.deltaY < 0 ? 1.18 : 0.85)));
+    if (lbSc===1) { lbX=0; lbY=0; }
+    applyT(false);
+  }, { passive: false });
+
+  /* Double-click */
+  area.addEventListener('dblclick', function() {
+    if (lbSc > 1) lbReset(); else { lbSc=2.5; applyT(true); }
+  });
+
+  /* Touch */
+  area.addEventListener('touchstart', function(e) {
+    if (e.touches.length === 2) {
+      pd0 = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+      ps0 = lbSc;
+    } else {
+      var now = Date.now();
+      if (now - lastTap < 280) { e.preventDefault(); if(lbSc>1) lbReset(); else { lbSc=2.5; applyT(true); } }
+      lastTap = now;
+      if (lbSc > 1) { dsx=e.touches[0].clientX; dsy=e.touches[0].clientY; psx=lbX; psy=lbY; }
+    }
+  }, { passive: false });
+
+  area.addEventListener('touchmove', function(e) {
+    e.preventDefault();
+    if (e.touches.length === 2) {
+      var d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+      lbSc = Math.max(1, Math.min(6, ps0 * (d/pd0)));
+      if (lbSc===1) { lbX=0; lbY=0; }
+      applyT(false);
+    } else if (e.touches.length===1 && lbSc>1) {
+      lbX = psx + (e.touches[0].clientX-dsx)/lbSc;
+      lbY = psy + (e.touches[0].clientY-dsy)/lbSc;
+      applyT(false);
+    }
+  }, { passive: false });
+
+  /* Keyboard */
+  document.addEventListener('keydown', function(e) {
+    if (g('lightbox').classList.contains('hidden')) return;
+    if (e.key==='Escape')                    closeLb();
+    if (e.key==='ArrowLeft')                 lbNav(-1);
+    if (e.key==='ArrowRight')                lbNav(1);
+    if (e.key==='+'||e.key==='=')            lbZoom(.35);
+    if (e.key==='-')                         lbZoom(-.3);
+    if (e.key==='0')                         lbReset();
+  });
+});
+
+/* ── Error / utils ───────────────────────────────────────────────── */
+function showErr(msg) {
+  hide('sk');
+  show('err');
+  g('err-txt').textContent = msg;
 }
 
-/* Mouse drag */
-lbWrap.addEventListener('mousedown', e => {
-  if (lbSc > 1) { dragging = true; dsx = e.clientX; dsy = e.clientY; psx = lbX; psy = lbY; lbWrap.classList.add('panning'); e.preventDefault(); }
-});
-document.addEventListener('mousemove', e => {
-  if (!dragging) return;
-  lbX = psx + (e.clientX - dsx) / lbSc;
-  lbY = psy + (e.clientY - dsy) / lbSc;
-  applyTransform(false);
-});
-document.addEventListener('mouseup', () => { dragging = false; lbWrap.classList.remove('panning'); });
-
-/* Mouse wheel zoom */
-lbWrap.addEventListener('wheel', e => {
-  e.preventDefault();
-  lbSc = Math.max(1, Math.min(6, lbSc * (e.deltaY < 0 ? 1.18 : 0.84)));
-  if (lbSc === 1) { lbX = 0; lbY = 0; }
-  applyTransform(false);
-}, { passive: false });
-
-/* Double-click zoom toggle */
-lbWrap.addEventListener('dblclick', () => {
-  if (lbSc > 1) lbReset(); else { lbSc = 2.5; applyTransform(true); }
-});
-
-/* Touch — pinch zoom + single-finger pan + double-tap */
-lbWrap.addEventListener('touchstart', e => {
-  if (e.touches.length === 2) {
-    pinchD0 = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    pinchS0 = lbSc;
-  } else {
-    const now = Date.now();
-    if (now - lastTap < 280) { e.preventDefault(); if (lbSc > 1) lbReset(); else { lbSc = 2.5; applyTransform(true); } }
-    lastTap = now;
-    if (lbSc > 1) { dsx = e.touches[0].clientX; dsy = e.touches[0].clientY; psx = lbX; psy = lbY; }
-  }
-}, { passive: false });
-
-lbWrap.addEventListener('touchmove', e => {
-  e.preventDefault();
-  if (e.touches.length === 2) {
-    const d = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
-    lbSc = Math.max(1, Math.min(6, pinchS0 * (d / pinchD0)));
-    if (lbSc === 1) { lbX = 0; lbY = 0; }
-    applyTransform(false);
-  } else if (e.touches.length === 1 && lbSc > 1) {
-    lbX = psx + (e.touches[0].clientX - dsx) / lbSc;
-    lbY = psy + (e.touches[0].clientY - dsy) / lbSc;
-    applyTransform(false);
-  }
-}, { passive: false });
-
-/* Keyboard */
-document.addEventListener('keydown', e => {
-  if (el('lb').classList.contains('hidden')) return;
-  const k = e.key;
-  if (k === 'Escape')               closeLb();
-  if (k === 'ArrowLeft')            lbNav(-1);
-  if (k === 'ArrowRight')           lbNav(1);
-  if (k === '+' || k === '=')       lbZoom(.4);
-  if (k === '-')                    lbZoom(-.4);
-  if (k === '0')                    lbReset();
-});
-
-/* ── States / utils ──────────────────────────────────────────── */
-function showErr(msg) { el('sk').classList.add('hidden'); el('err').classList.remove('hidden'); el('err-text').textContent = msg; }
-function el(id) { return document.getElementById(id); }
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
+/* ── Init ────────────────────────────────────────────────────────── */
 load();
 </script>
 </body>
