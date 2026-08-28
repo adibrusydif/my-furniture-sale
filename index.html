@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Furniture for Sale 🛋️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#FAF8F5;--surface:#FFFFFF;--primary:#B5622A;--text:#1C1917;
+      --muted:#78716C;--border:#E7E5E4;--sold:#DC2626;--avail:#16A34A;
+      --r:12px;
+      --sh:0 1px 3px rgba(0,0,0,.10),0 1px 2px rgba(0,0,0,.06);
+      --sh-lg:0 10px 15px -3px rgba(0,0,0,.10),0 4px 6px -2px rgba(0,0,0,.05);
+    }
+    body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+    /* Header */
+    header{background:linear-gradient(135deg,#1C0A00 0%,#5C3317 55%,#8B4513 100%);color:#fff;padding:56px 24px 64px;text-align:center;position:relative;overflow:hidden}
+    .h-flag{font-size:2.8rem;display:block;margin-bottom:10px}
+    header h1{font-size:clamp(1.8rem,5vw,3rem);font-weight:700;letter-spacing:-.03em;margin-bottom:8px}
+    header p{font-size:clamp(.9rem,2.2vw,1.1rem);opacity:.75}
+    /* Filter */
+    .filter-bar{position:sticky;top:0;z-index:50;background:rgba(250,248,245,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .filter-btn{background:transparent;border:1.5px solid var(--border);color:var(--muted);padding:5px 18px;border-radius:99px;font:500 .85rem 'Inter',sans-serif;cursor:pointer;transition:all .15s}
+    .filter-btn:hover{border-color:var(--primary);color:var(--primary)}
+    .filter-btn.active{background:var(--primary);border-color:var(--primary);color:#fff}
+    .count-chip{margin-left:auto;font-size:.78rem;color:var(--muted);background:var(--border);padding:3px 10px;border-radius:99px;white-space:nowrap}
+    /* Main */
+    main{max-width:1200px;margin:0 auto;padding:32px 20px 64px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px}
+    @media(max-width:600px){.grid{grid-template-columns:1fr;gap:16px}main{padding:20px 14px 50px}}
+    /* Card */
+    .card{background:var(--surface);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;transition:box-shadow .2s,transform .2s}
+    .card:hover{box-shadow:var(--sh-lg);transform:translateY(-3px)}
+    .card.sold{opacity:.7}
+    /* Slideshow */
+    .slideshow{position:relative;height:250px;background:#F0EAE0;overflow:hidden}
+    .slides{display:flex;height:100%;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform}
+    .slide{min-width:100%;height:100%;flex-shrink:0}
+    .slide img{width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none;display:block}
+    .slide-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:5rem;background:linear-gradient(135deg,#F0EAE0,#E0D5C5)}
+    .nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.88);border:none;border-radius:50%;width:34px;height:34px;font-size:1.15rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.18);transition:all .15s;z-index:2}
+    .nav-btn:hover{background:#fff;transform:translateY(-50%) scale(1.1)}
+    .nav-btn.lft{left:8px}.nav-btn.rgt{right:8px}
+    .dots{position:absolute;bottom:9px;left:50%;transform:translateX(-50%);display:flex;gap:4px;z-index:2}
+    .dot{width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.55);border:none;cursor:pointer;padding:0;transition:all .2s}
+    .dot.active{background:#fff;width:20px}
+    .sold-overlay{position:absolute;inset:0;background:rgba(0,0,0,.42);display:flex;align-items:center;justify-content:center;z-index:3}
+    .sold-stamp{background:var(--sold);color:#fff;font-weight:800;font-size:1.6rem;letter-spacing:.1em;padding:6px 26px;border-radius:4px;transform:rotate(-12deg);box-shadow:0 4px 16px rgba(220,38,38,.45)}
+    /* Card body */
+    .card-body{padding:16px 18px 18px}
+    .card-title{font-size:1.05rem;font-weight:600;margin-bottom:6px;line-height:1.35}
+    .card-desc{font-size:.86rem;color:var(--muted);line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:14px}
+    .card-foot{display:flex;align-items:center;justify-content:space-between}
+    .price{font-size:1.45rem;font-weight:700;color:var(--primary)}
+    .badge{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;padding:3px 10px;border-radius:99px}
+    .badge.avail{background:#DCFCE7;color:#15803D}
+    .badge.sold{background:#FEE2E2;color:#B91C1C}
+    /* Skeleton */
+    .sk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:24px}
+    @media(max-width:600px){.sk-grid{grid-template-columns:1fr}}
+    .sk-card{background:#fff;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+    .sk-img{height:250px}
+    .sk-bar{height:13px;border-radius:6px;margin:9px 18px}
+    .sk-bar.wide{width:75%;margin-top:17px}
+    .sk-bar.tall{height:40px}
+    .sk-bar.slim{width:40%;margin-bottom:18px}
+    .sk-img,.sk-bar{background:linear-gradient(90deg,#EDE7DF 25%,#DDD5C8 50%,#EDE7DF 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    /* Messages */
+    .msg{text-align:center;padding:80px 20px}
+    .msg .icon{font-size:4rem;display:block;margin-bottom:16px}
+    .msg h3{font-size:1.2rem;font-weight:600;margin-bottom:8px}
+    .msg p{color:var(--muted);font-size:.875rem;max-width:320px;margin:0 auto}
+    /* Footer */
+    footer{text-align:center;padding:28px 20px;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted)}
+    footer a{color:var(--muted);text-decoration:none;opacity:.4;transition:opacity .15s}
+    footer a:hover{opacity:1}
+    .hidden{display:none!important}
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="h-flag">&#127465;&#127466;</span>
+  <h1>&#128715; Furniture for Sale</h1>
+  <p>Moving out of Germany &#8212; everything must go!</p>
+</header>
+
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all"       onclick="setFilter('all')">All</button>
+  <button class="filter-btn"        data-filter="available" onclick="setFilter('available')">Available</button>
+  <button class="filter-btn"        data-filter="sold"      onclick="setFilter('sold')">Sold</button>
+  <span class="count-chip" id="chip"></span>
+</div>
+
+<main>
+  <div id="loading" class="sk-grid">
+    <div class="sk-card"><div class="sk-img"></div><div class="sk-bar wide"></div><div class="sk-bar tall"></div><div class="sk-bar slim"></div></div>
+    <div class="sk-card"><div class="sk-img"></div><div class="sk-bar wide"></div><div class="sk-bar tall"></div><div class="sk-bar slim"></div></div>
+    <div class="sk-card"><div class="sk-img"></div><div class="sk-bar wide"></div><div class="sk-bar tall"></div><div class="sk-bar slim"></div></div>
+  </div>
+  <div id="error" class="msg hidden"><span class="icon">&#9888;&#65039;</span><h3>Couldn't load products</h3><p id="err-text"></p></div>
+  <div id="empty" class="msg hidden"><span class="icon">&#128230;</span><h3>No items listed yet</h3><p>Check back soon &mdash; products will appear here once the admin adds them.</p></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  <p>Made with &#10084;&#65039; &nbsp;&middot;&nbsp; <a href="admin.html">Admin</a></p>
+</footer>
+
+<script>
+/* CONFIG: leave empty for GitHub Pages auto-detect, or fill in for local testing */
+const CONFIG = { owner: '', repo: '', branch: 'main' };
+
+let products = [], filter = 'all';
+const ss = {};
+
+function repoInfo() {
+  if (CONFIG.owner && CONFIG.repo) return CONFIG;
+  const h = location.hostname, p = location.pathname;
+  if (h.endsWith('.github.io')) {
+    return { owner: h.slice(0, h.indexOf('.github.io')), repo: p.split('/').filter(Boolean)[0] || '', branch: CONFIG.branch };
+  }
+  return null;
+}
+
+async function load() {
+  const r = repoInfo();
+  if (!r || !r.owner || !r.repo)
+    return showError('Repo not configured. Fill in CONFIG in index.html or deploy to GitHub Pages.');
+  const url = `https://raw.githubusercontent.com/${r.owner}/${r.repo}/${r.branch}/data/products.json?_=${Date.now()}`;
+  try {
+    const res = await fetch(url);
+    if (res.status === 404) return showEmpty();
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    products = await res.json();
+    render();
+  } catch(e) { showError(e.message); }
+}
+
+function render() {
+  el('loading').classList.add('hidden');
+  el('error').classList.add('hidden');
+  el('empty').classList.add('hidden');
+  let list = products;
+  if (filter === 'available') list = products.filter(p => !p.sold);
+  if (filter === 'sold')      list = products.filter(p =>  p.sold);
+  el('chip').textContent = `${list.length} item${list.length !== 1 ? 's' : ''}`;
+  const grid = el('grid');
+  if (!list.length) { grid.innerHTML = ''; el('empty').classList.remove('hidden'); return; }
+  grid.innerHTML = list.map(cardHtml).join('');
+}
+
+function cardHtml(p) {
+  const { id, title, description, price, sold, images = [] } = p;
+  ss[id] = ss[id] ?? 0;
+  const cur = ss[id], total = images.length;
+  const slides = total
+    ? images.map(src => `<div class="slide"><img src="${esc(src)}" alt="${esc(title)}" loading="lazy"></div>`).join('')
+    : `<div class="slide"><div class="slide-ph">&#128715;</div></div>`;
+  const arrows = total > 1 ? `
+    <button class="nav-btn lft" onclick="go('${id}',-1,${total})" aria-label="Previous">&#8249;</button>
+    <button class="nav-btn rgt" onclick="go('${id}', 1,${total})" aria-label="Next">&#8250;</button>` : '';
+  const dots = total > 1
+    ? `<div class="dots">${images.map((_,i)=>
+        `<button class="dot ${i===cur?'active':''}" onclick="goTo('${id}',${i})" aria-label="Slide ${i+1}"></button>`
+      ).join('')}</div>` : '';
+  const overlay = sold ? `<div class="sold-overlay"><span class="sold-stamp">SOLD</span></div>` : '';
+  return `
+  <article class="card ${sold?'sold':''}" id="c-${id}">
+    <div class="slideshow">
+      <div class="slides" id="sl-${id}" style="transform:translateX(-${cur*100}%)">
+        ${slides}
+      </div>
+      ${arrows}${dots}${overlay}
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">${esc(title)}</h2>
+      <p class="card-desc">${esc(description)}</p>
+      <div class="card-foot">
+        <span class="price">&#8364;${Number(price).toLocaleString('de-DE')}</span>
+        <span class="badge ${sold?'sold':'avail'}">${sold?'Sold':'Available'}</span>
+      </div>
+    </div>
+  </article>`;
+}
+
+function go(id, dir, total) { goTo(id, ((ss[id]??0)+dir+total) % total); }
+function goTo(id, idx) {
+  ss[id] = idx;
+  const inner = document.getElementById(`sl-${id}`);
+  if (inner) inner.style.transform = `translateX(-${idx*100}%)`;
+  document.getElementById(`c-${id}`)?.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===idx));
+}
+
+function setFilter(f) {
+  filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+  render();
+}
+
+function showError(msg) { el('loading').classList.add('hidden'); el('error').classList.remove('hidden'); el('err-text').textContent = msg; }
+function showEmpty()    { el('loading').classList.add('hidden'); el('empty').classList.remove('hidden'); }
+function el(id) { return document.getElementById(id); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+load();
+</script>
+</body>
+</html>
