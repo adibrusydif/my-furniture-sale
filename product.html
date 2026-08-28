@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Product — Furniture Sale</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
@@ -129,6 +132,35 @@
     #lb-pct{color:rgba(255,255,255,.6);font-size:.8rem;min-width:44px;text-align:center}
     #lb-tip{color:rgba(255,255,255,.4);font-size:.72rem;position:absolute;bottom:60px;left:50%;transform:translateX(-50%);white-space:nowrap;pointer-events:none;transition:opacity .5s}
 
+
+    /* ── Cart ─────────────────────────────────────────────────────── */
+    .cart-fab{position:fixed;bottom:24px;right:18px;z-index:150;background:var(--primary);color:#fff;border:none;border-radius:99px;padding:11px 20px;font:600 .88rem 'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.28);display:flex;align-items:center;gap:8px;transition:all .2s}
+    .cart-fab:hover{transform:translateY(-2px)}
+    .cart-ct{background:#DC2626;color:#fff;font-size:.65rem;font-weight:700;min-width:18px;height:18px;border-radius:99px;display:flex;align-items:center;justify-content:center;padding:0 4px;line-height:1}
+    .cart-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s}
+    .cart-ov.open{opacity:1;pointer-events:all}
+    .cart-dr{position:fixed;top:0;right:0;bottom:0;width:min(400px,100vw);background:#fff;z-index:201;display:flex;flex-direction:column;transform:translateX(110%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-4px 0 24px rgba(0,0,0,.15)}
+    .cart-dr.open{transform:translateX(0)}
+    .c-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+    .c-hdr h2{font-size:1rem;font-weight:700}
+    .c-x{background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted);padding:4px;border-radius:6px}
+    .c-x:hover{background:var(--border)}
+    .c-list{flex:1;overflow-y:auto;padding:4px 0}
+    .c-item{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid var(--border)}
+    .c-body{flex:1;min-width:0}
+    .c-name{font-size:.88rem;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .c-pr{font-size:.9rem;font-weight:700;color:var(--primary)}
+    .c-rm{background:none;border:none;color:var(--muted);font-size:1.1rem;cursor:pointer;padding:6px;border-radius:6px;transition:all .15s;flex-shrink:0}
+    .c-rm:hover{background:#FEE2E2;color:#DC2626}
+    .c-empty{text-align:center;padding:48px 20px;color:var(--muted)}
+    .c-ftr{border-top:1px solid var(--border);padding:16px 20px;flex-shrink:0}
+    .c-tot-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+    .c-tot-lbl{font-size:.9rem;font-weight:600}
+    .c-tot-amt{font-size:1.3rem;font-weight:700;color:var(--primary)}
+    .wa-btn{width:100%;background:#25D366;color:#fff;border:none;border-radius:10px;padding:13px;font:600 .95rem 'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
+    .wa-btn:hover{background:#1DA855}
+    .add-cart-btn{background:var(--primary);color:#fff;border:none;border-radius:6px;padding:6px 14px;font:600 .82rem 'Inter',sans-serif;cursor:pointer;transition:background .15s;white-space:nowrap}
+    .add-cart-btn:hover{background:#944F20}
     .hidden{display:none!important}
   </style>
 </head>
@@ -185,6 +217,7 @@
     <div class="prow">
       <span class="pprice" id="p-price"></span>
       <span class="badge" id="p-status"></span>
+      <button class="add-cart-btn hidden" id="add-cart-btn" onclick="detailCartAdd()">+ Add to Cart</button>
     </div>
     <div class="divider"></div>
     <div class="dlabel">Description</div>
@@ -257,8 +290,10 @@ async function load() {
 /* ── Render ──────────────────────────────────────────────────────── */
 function render(p) {
   hide('sk');
+  productData = p;
   imgs = p.images || [];
   cur  = 0;
+  if(!p.sold){ show('add-cart-btn'); }else{ hide('add-cart-btn'); }
 
   document.title = p.title + ' — Furniture Sale';
   g('nav-name').textContent = p.title;
@@ -361,6 +396,13 @@ window.addEventListener('DOMContentLoaded', function() {
   g('lb-in').addEventListener('click',  function(){ lbZoom(.35); });
   g('lb-out').addEventListener('click', function(){ lbZoom(-.3); });
   g('lb-rst').addEventListener('click', lbReset);
+  g('lb-close').addEventListener('click', closeLb);
+  g('lb-prev').addEventListener('click', function(){ lbNav(-1); });
+  g('lb-next').addEventListener('click', function(){ lbNav(1); });
+  g('lb-in').addEventListener('click',  function(){ lbZoom(.35); });
+  g('lb-out').addEventListener('click', function(){ lbZoom(-.3); });
+  g('lb-rst').addEventListener('click', lbReset);
+  cBadge();
 
   var area = g('lb-area');
 
@@ -438,8 +480,103 @@ function showErr(msg) {
   g('err-txt').textContent = msg;
 }
 
+
+/* ── Cart Logic ─────────────────────────────────────────────────── */
+var productData = null;
+
+function getCart(){try{return JSON.parse(localStorage.getItem('fg_cart')||'[]');}catch(e){return[];}}
+function saveCart(c){localStorage.setItem('fg_cart',JSON.stringify(c));}
+
+function detailCartAdd(){
+  if(!productData)return;
+  var cart=getCart();
+  for(var i=0;i<cart.length;i++){if(cart[i].id===productData.id){cToast('Already in cart \u2714');return;}}
+  cart.push({id:productData.id,title:productData.title,price:productData.price});
+  saveCart(cart);cBadge();cToast('Added to cart \u2705');
+}
+
+function cartRemove(id){
+  saveCart(getCart().filter(function(x){return x.id!==id;}));
+  cBadge();renderCart();
+}
+
+function cBadge(){
+  var n=getCart().length,b=g('cart-ct');
+  if(b){b.textContent=n;b.style.display=n>0?'flex':'none';}
+}
+
+function openCart(){
+  g('cart-ov').classList.add('open');
+  g('cart-dr').classList.add('open');
+  document.body.style.overflow='hidden';
+  renderCart();
+}
+
+function closeCart(){
+  g('cart-ov').classList.remove('open');
+  g('cart-dr').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function renderCart(){
+  var cart=getCart(),list=g('c-list'),wa=g('wa-btn'),tot=g('c-tot');
+  if(!cart.length){
+    list.innerHTML='<div class="c-empty"><p>\u{1F6D2} Cart is empty</p></div>';
+    if(wa)wa.style.display='none';if(tot)tot.textContent='\u20AC0';return;
+  }
+  var total=0,html='';
+  for(var i=0;i<cart.length;i++){
+    var item=cart[i];total+=Number(item.price);
+    html+='<div class="c-item"><div class="c-body"><div class="c-name">'+xss(item.title)+'</div>'+
+      '<div class="c-pr">\u20AC'+Number(item.price).toLocaleString('de-DE')+'</div></div>'+
+      '<button class="c-rm" onclick="cartRemove(\''+item.id+'\')">\u00D7</button></div>';
+  }
+  list.innerHTML=html;
+  if(tot)tot.textContent='\u20AC'+total.toLocaleString('de-DE');
+  if(wa)wa.style.display='';
+}
+
+function contactWa(){
+  var cart=getCart();if(!cart.length)return;
+  var msg='Halo! Saya tertarik membeli:\n\n',total=0;
+  for(var i=0;i<cart.length;i++){
+    msg+='\u2022 '+cart[i].title+': \u20AC'+Number(cart[i].price).toLocaleString('de-DE')+'\n';
+    total+=Number(cart[i].price);
+  }
+  msg+='\nTotal: \u20AC'+total.toLocaleString('de-DE');
+  msg+='\n\nDari: adibrusydif.github.io/my-furniture-sale';
+  window.open('https://wa.me/4915231413165?text='+encodeURIComponent(msg),'_blank');
+}
+
+function xss(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+var _ct;
+function cToast(msg){
+  var t=document.getElementById('_ct');
+  if(!t){t=document.createElement('div');t.id='_ct';
+    t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 22px;border-radius:99px;font:500 .875rem Inter,sans-serif;z-index:10000;white-space:nowrap;max-width:90vw;text-align:center;transition:opacity .2s;pointer-events:none';
+    document.body.appendChild(t);}
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(_ct);_ct=setTimeout(function(){t.style.opacity='0';},2500);
+}
+
+// In DOMContentLoaded we also register handlers for cart buttons if needed
 /* ── Init ────────────────────────────────────────────────────────── */
 load();
 </script>
+
+<!-- Cart FAB -->
+<button class="cart-fab" onclick="openCart()">&#128722; Cart<span class="cart-ct" id="cart-ct" style="display:none">0</span></button>
+
+<!-- Cart drawer -->
+<div class="cart-ov" id="cart-ov" onclick="closeCart()"></div>
+<div class="cart-dr" id="cart-dr">
+  <div class="c-hdr"><h2>&#128722; Your Cart</h2><button class="c-x" onclick="closeCart()">&#215;</button></div>
+  <div class="c-list" id="c-list"></div>
+  <div class="c-ftr">
+    <div class="c-tot-row"><span class="c-tot-lbl">Total</span><span class="c-tot-amt" id="c-tot">&#8364;0</span></div>
+    <button class="wa-btn" id="wa-btn" onclick="contactWa()" style="display:none">&#128241; Contact via WhatsApp</button>
+  </div>
+</div>
 </body>
 </html>
