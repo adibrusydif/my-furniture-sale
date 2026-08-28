@@ -1,5 +1,18 @@
 [
   {
+    "id": "4324a79a-52c6-4b89-ad29-4429c3ff417c",
+    "title": "Air Fryer Philip",
+    "description": "Buat masak masak",
+    "price": 50,
+    "sold": false,
+    "images": [
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787949586709_IMG_1760.jpeg",
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787949589906_IMG_1762.jpeg",
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787949593207_IMG_1761.jpeg"
+    ],
+    "createdAt": "2026-08-28T20:39:56.874Z"
+  },
+  {
     "id": "c6453dad-891b-4d9e-aae8-230984b946b0",
     "title": "Stelrilizator Philip",
     "description": "Buat sterilin barang2 bayi",
