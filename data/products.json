@@ -1,5 +1,19 @@
 [
   {
+    "id": "c6453dad-891b-4d9e-aae8-230984b946b0",
+    "title": "Stelrilizator Philip",
+    "description": "Buat sterilin barang2 bayi",
+    "price": 10,
+    "sold": false,
+    "images": [
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787949457287_IMG_1767.jpeg",
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787949461325_IMG_1765.jpeg",
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787949464440_IMG_1766.jpeg",
+      "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787949467451_IMG_1768.jpeg"
+    ],
+    "createdAt": "2026-08-28T20:37:51.277Z"
+  },
+  {
     "id": "e78077b3-fa6f-4981-92a2-370deca2a179",
     "title": "Sweeek Sofabed",
     "description": "condition good",
