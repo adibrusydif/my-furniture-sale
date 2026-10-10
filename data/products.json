@@ -1,5 +1,16 @@
 [
   {
+    "id": "0d2a97f1-71f0-42ba-a5b7-1f967e8a7088",
+    "title": "Gantungan handuk",
+    "description": "Baru",
+    "price": 5,
+    "sold": false,
+    "images": [
+      "https://raw.githubusercontent.com/Adibrusydif/My-furniture-sale/main/images/1791621440164_51f6bcce-3388-48f8-8010-40e6d943f9c0.jpeg"
+    ],
+    "createdAt": "2026-10-10T08:37:22.366Z"
+  },
+  {
     "id": "1bc8578e-f0c3-4d36-a8d5-abc3a6dfd6b3",
     "title": "Termos (baru)",
     "description": "Kondisi baru, belum di buka, merk home creation",
