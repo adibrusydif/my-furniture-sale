@@ -54,7 +54,7 @@
     "title": "Sweeek Sofabed",
     "description": "condition good",
     "price": 150,
-    "sold": false,
+    "sold": true,
     "images": [
       "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787948554053_IMG_2636.png",
       "https://raw.githubusercontent.com/adibrusydif/my-furniture-sale/main/images/1787948556460_IMG_2633.jpeg",
